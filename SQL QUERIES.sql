@@ -1,30 +1,31 @@
 -- SQL Retail Sales Analysis - P1
-CREATE DATABASE sql_project_p2;
+CREATE DATABASE retail_sale_db;
 
 
 -- Create TABLE
 DROP TABLE IF EXISTS retail_sales;
 CREATE TABLE retail_sales
             (
-                transaction_id INT PRIMARY KEY,	
+                transaction_id SERIAL PRIMARY KEY,	
                 sale_date DATE,	 
                 sale_time TIME,	
-                customer_id	INT,
-                gender	VARCHAR(15),
+                customer_id INT,
+                gender	VARCHAR ,
                 age	INT,
-                category VARCHAR(15),	
-                quantity	INT,
+                category VARCHAR ,	
+                quantity INT,
                 price_per_unit FLOAT,	
                 cogs	FLOAT,
                 total_sale FLOAT
             );
 
+-- To get first 10 records
 SELECT * FROM retail_sales
-LIMIT 10
+LIMIT 10;
 
 
     
-
+-- To count total records
 SELECT 
     COUNT(*) 
 FROM retail_sales
@@ -82,11 +83,10 @@ WHERE
 SELECT COUNT(*) as total_sale FROM retail_sales
 
 -- How many uniuque customers we have ?
-
 SELECT COUNT(DISTINCT customer_id) as total_sale FROM retail_sales
 
 
-
+-- How many uniuque category we have ?
 SELECT DISTINCT category FROM retail_sales
 
 
@@ -206,22 +206,14 @@ GROUP BY category
 
 -- Q.10 Write a SQL query to create each shift and number of orders (Example Morning <12, Afternoon Between 12 & 17, Evening >17)
 
-WITH hourly_sale
-AS
-(
-SELECT *,
-    CASE
-        WHEN EXTRACT(HOUR FROM sale_time) < 12 THEN 'Morning'
-        WHEN EXTRACT(HOUR FROM sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
-        ELSE 'Evening'
-    END as shift
-FROM retail_sales
-)
 SELECT 
-    shift,
-    COUNT(*) as total_orders    
-FROM hourly_sale
-GROUP BY shift
+      CASE 
+            WHEN EXTRACT(HOUR FROM SALE_TIME)<12 THEN 'Morning'
+	WHEN EXTRACT(HOUR FROM SALE_TIME) BETWEEN 12 AND 17 THEN 'Afternoon'
+      ELSE 'Evening' END AS SHIFT,
+      COUNT(*) NO_OF_ORDER
+FROM retail_sales
+GROUP BY SHIFT
 
 -- End of project
 
